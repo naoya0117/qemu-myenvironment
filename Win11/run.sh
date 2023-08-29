@@ -29,7 +29,11 @@ qemu-system-x86_64 \
 -device usb-ehci,id=ehci -device usb-host,hostbus=1,hostaddr=2 \
 -net user,hostfwd=tcp::5555-:22 \
 -net nic,macaddr=$(${QEMU_DIR}/../tools/qemu-mac-hasher.py "$VM_NAME") \
--vga std \
+-vga qxl -device virtio-serial-pci \
+-spice unix=on,addr=/tmp/vm_spice.socket,disable-ticketing=on \
+-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
+-chardev spicevmc,id=spicechannel0,name=vdagent \
+-display spice-app \
 -daemonize
 
 #if use wsl2, replace -cpu host to  -cpu  Skylake-Client-noTSX-IBRS
