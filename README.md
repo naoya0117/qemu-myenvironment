@@ -69,7 +69,7 @@ Bus 001 Device 004: ID 8087:0aaa Intel Corp. Bluetooth 9460/9560 Jefferson Peak 
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 ```
 - 以上の名前からIntegrated Cameraっぽいものを探す。その行のBus,Deviceの値がそれぞれ、CAMERA_HOSTBUS,CAMERA_HOSTADDRの値となる。
-- また、ファイルの非特権ユーザで起動すると、deviceの権限エラーが起こることがある。以下の方法で回避する
+- また、run.shを非特権ユーザで起動すると、deviceの権限エラーが起こることがある。以下の方法で回避する
     - 専用のグループを作り、ユーザに所属させる
         ```
         # groupadd video
