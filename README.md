@@ -43,6 +43,7 @@ vim /path/to/run.sh
 ```
 /path/to/run.sh
 ```
+- クリップボードの共有のため、spice-clientをゲストOSにインストールする。(windowsはhttps://www.spice-space.org/download.htmlで入手できる, また一部のLinuxディストリビューションにはデフォルトでインストールされている)
 ## run.shスクリプトを編集する
 仮想マシンの実行に当たりrun.shを編集する必要がある。
 - まず、変更が必要な部分は以下のとおりである。(Linuxの場合は、DRIVE_ISOは不要)
