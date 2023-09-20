@@ -30,7 +30,7 @@ chmod u+x /path/to/run.sh
 ```
 cp /usr/share/ovmf/x64/OVMF_VARS.fd ~/path/to/guest_os/
 ```
-- ストレージに該当するファイルをguest_osディレクトリ直下に配置する
+- ストレージに該当するファイルをguest_osディレクトリ直下に生成する
 ```
 cd /path/to/guest_os
 qemu-img create -f raw guest_os_img(好きな名前) 32G(サイズ)
