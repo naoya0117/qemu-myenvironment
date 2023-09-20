@@ -4,6 +4,7 @@
 VM_NAME="Windows11"
 OS_ISO="Win11_22H2_English_x64v2.iso"
 DRIVER_ISO="virtio-win-0.1.229.iso"
+IMG_FILE="windows11_img"
 CAMERA_HOSTBUS=1
 CAMERA_HOSTADDR=2
 #####################################
@@ -30,7 +31,7 @@ qemu-system-x86_64 \
 -machine type=q35,smm=on,accel=kvm \
 -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,-hypervisor,+vmx \
 -enable-kvm \
--drive format=raw,file=${QEMU_DIR}/windows11_img,index=0,media=disk,if=virtio \
+-drive format=raw,file=${QEMU_DIR}/${IMG_FILE},index=0,media=disk,if=virtio \
 -drive file=${QEMU_DIR}/iso/${OS_ISO},index=2,media=cdrom \
 -drive file=${QEMU_DIR}/iso/${DRIVER_ISO},index=3,media=cdrom \
 -global ICH9-LPC.disable_s3=1 \
