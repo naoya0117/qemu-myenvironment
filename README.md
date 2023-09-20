@@ -1,6 +1,52 @@
 # qemu-myenvironment
 my qemu run scripts
-## how to use
+## 使い方
+- 必要なペッケージをインストールする
+```
+sudo pacman -S qemu-full swtpm edk2-ovmf
+```
+ディレクトリを作る。guest_osディレクトリは好きな名前に読み替えること
+```
+mkdir qemu/toos qemu/guest_os qemu/guest_os/iso qemu/guest_os/tpm
+```
+- 以下のように本リポジトリのファイルを配置する(iso,tpmは空ディレクトリ)
+```
+qemu
+├── tools
+│   └── qemu-mac-hasher.py(本リポジトリのtools以下のスクリプト)
+└── guest_os
+    ├── iso
+    ├── run.sh(本リポジトリのrun.shスクリプト)
+    └── tpm
+```
+- qemu-mac-hasher.pyはrun.sh上の環境変数VM_NAME(後述)のハッシュ値からmacアドレスを生成する役割を持つ。
+- qemu-mac-hasher.pyとrun.shに実行権限を付与する
+```
+chmod u+x /path/to/qemu-mac-hasher.py
+chmod u+x /path/to/run.sh
+```
+- ゲストOSのOSイメージ(isoファイル)をisoディレクトリ直下に置く。Windowsの場合は別途ドライバが必要なため、https://github.com/virtio-win/virtio-win-pkg-scripts/blob/master/README.md のisoファイルも合わせて2つ配置する必要がある。
+- UEFI環境を使用するため、guest_osディレクトリ直下にOVMF_VARS.fdを配置する。
+```
+cp /usr/share/ovmf/x64/OVMF_VARS.fd ~/path/to/guest_os/
+```
+- ストレージに該当するファイルをguest_osディレクトリ直下に配置する
+```
+cd /path/to/guest_os
+qemu-img create -f raw guest_os_img(好きな名前) 32G(サイズ)
+```
+- 実行スクリプトrun.shを環境に合わせて変更する(次の章を参照)
+```
+vim /path/to/run.sh
+```
+- 仮想マシンを起動する
+```
+/path/to/run.sh
+```
+## run.shスクリプトを編集する
+```
+
+
 ```
 guest_os
 ├── iso
