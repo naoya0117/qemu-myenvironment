@@ -16,10 +16,33 @@ HOST_PORT=5555
 
 
 QEMU_DIR=$(cd $(dirname $0); pwd)
+SOCKET=/tmp/vm_spice.socket
+
+while getopts "cd" opt; do
+  case ${opt} in
+    c)
+        remote-viewer spice+unix://${SOCKET} 1>/dev/null 2>&1  &
+        exit 0
+        ;;
+    d)
+        daemon=true
+        ;;
+    *)
+        echo "Usage: $0 [-d]"
+        exit 1
+        ;;
+  esac
+done
+
+if [[ -e ${SOCKET} ]]; then
+    echo "Error: VM is already running?" 1>&2
+    exit 1
+fi
+
 
 swtpm socket --tpm2 --tpmstate dir=$QEMU_DIR/tpm --ctrl type=unixio,path=$QEMU_DIR/tpm/tpm-socket &
 
-
+{
 qemu-system-x86_64 \
 -name $VM_NAME \
 -rtc base=localtime,clock=host \
@@ -44,18 +67,22 @@ qemu-system-x86_64 \
 -net user,hostfwd=tcp::${HOST_PORT}-:${GUEST_PORT} \
 -net nic,macaddr=$(${QEMU_DIR}/../tools/qemu-mac-hasher.py "$VM_NAME") \
 -vga qxl -device virtio-serial-pci \
--spice unix=on,addr=/tmp/vm_spice.socket,disable-ticketing=on \
+-spice unix=on,addr=${SOCKET},disable-ticketing=on \
 -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
 -chardev spicevmc,id=spicechannel0,name=vdagent \
--display spice-app \
+-acpitable file="${QEMU_DIR}/acpi/msdm.bin" \
 -device ich9-usb-ehci1,id=usb \
 -device ich9-usb-uhci1,masterbus=usb.0,firstport=0,multifunction=on \
 -device ich9-usb-uhci2,masterbus=usb.0,firstport=2 \
 -device ich9-usb-uhci3,masterbus=usb.0,firstport=4 \
 -chardev spicevmc,name=usbredir,id=usbredirchardev1 -device usb-redir,chardev=usbredirchardev1,id=usbredirdev1 \
 -chardev spicevmc,name=usbredir,id=usbredirchardev2 -device usb-redir,chardev=usbredirchardev2,id=usbredirdev2 \
--chardev spicevmc,name=usbredir,id=usbredirchardev3 -device usb-redir,chardev=usbredirchardev3,id=usbredirdev3 \
--daemonize
+-chardev spicevmc,name=usbredir,id=usbredirchardev3 -device usb-redir,chardev=usbredirchardev3,id=usbredirdev3 2>/dev/null & 
+wait $(pidof qemu-system-x86_64)
+rm -f ${SOCKET} &
+} &
 
-#if use wsl2, replace -cpu host to  -cpu  Skylake-Client-noTSX-IBRS
+[ daemon ] || remote-viewer spice+unix://${SOCKET} 1>/dev/null 2>&1  &
+
+#if you use wsl2, replace -cpu host to  -cpu  Skylake-Client-noTSX-IBRS
 # you can put windows productkey in ${QEMU_DIR}/acpi/msdm.bin and use it with -acpitable file="${QEMU_DIR}/acpi/msdm.bin" 
