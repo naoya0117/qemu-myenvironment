@@ -84,5 +84,7 @@ rm -f ${SOCKET} &
 
 [ daemon ] || remote-viewer spice+unix://${SOCKET} 1>/dev/null 2>&1  &
 
-#if you use wsl2, replace -cpu host to  -cpu  Skylake-Client-noTSX-IBRS
+
+
+#if use wsl2, replace -cpu host to  -cpu  Skylake-Client-noTSX-IBRS
 # you can put windows productkey in ${QEMU_DIR}/acpi/msdm.bin and use it with -acpitable file="${QEMU_DIR}/acpi/msdm.bin" 
