@@ -124,7 +124,6 @@ Xubuntu
 
 ```
 ## Links
-## Links
 - Repository: [https://github.com/naoya0117/qemu-scripts](https://github.com/naoya0117/qemu-scripts)
 - Github: [https://github.com/naoya0117](https://github.com/naoya0117)
 - Blog: [https://naoya0117.com](https://naoya0117.com)
